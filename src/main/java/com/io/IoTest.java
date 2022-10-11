@@ -2,10 +2,7 @@ package com.io;
 
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 
 /**
@@ -76,6 +73,30 @@ public class IoTest {
             try {
                 if (fileReader != null) {
                     fileReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Test
+    public void testFileWriter() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileWriter.txt");
+        FileWriter fileWriter = null;
+        try {
+//            是否为追加！
+//            fileWriter = new FileWriter(file, false);
+            fileWriter = new FileWriter(file, true);
+            fileWriter.write("hello, world");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileWriter != null) {
+                    fileWriter.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
