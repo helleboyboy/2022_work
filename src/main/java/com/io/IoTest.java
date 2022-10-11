@@ -87,7 +87,7 @@ public class IoTest {
         File file = new File(filePath, "testFileWriter.txt");
         FileWriter fileWriter = null;
         try {
-//            是否为追加！
+//            是否为追加！覆盖
 //            fileWriter = new FileWriter(file, false);
             fileWriter = new FileWriter(file, true);
             fileWriter.write("hello, world");
@@ -97,6 +97,47 @@ public class IoTest {
             try {
                 if (fileWriter != null) {
                     fileWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 利用FileReader和FileWriter来进行读写文件内容
+     * 记得关闭文件流，否则会出现目标为空白文件
+     */
+    @Test
+    public void testFileReaderAndFileWriter() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileReader.txt");
+        File tarFile = new File(filePath, "testFileWriterTar.txt");
+        FileReader fileReader = null;
+        FileWriter fileWriter = null;
+        try {
+            fileReader = new FileReader(file);
+            fileWriter = new FileWriter(tarFile, true);
+            char[] charBuffer = new char[10];
+            int len = 0;
+            while ((len = fileReader.read(charBuffer)) != -1){
+                String tempRes = new String(charBuffer, 0, len);
+                fileWriter.write(tempRes);
+            }
+            System.out.println("finished");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileWriter != null) {
+                    fileWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fileReader != null) {
+                    fileReader.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
