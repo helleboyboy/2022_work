@@ -4,11 +4,15 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.Date;
 
 /**
  * @Author: Java页大数据
  * @Date: 2022-10-11:22:07
  * @Describe:
+ *  总结：
+ *      文本文件用字符流来读写，反例：字符流读写jpg文件
+ *      非文本文件用字节流来读写；反例：字节流读写含中文文件乱码(输出打印会乱码，复制是不会乱码的)
  */
 public class IoTest {
     /**
@@ -143,5 +147,157 @@ public class IoTest {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    /**
+     * 测试FileInputStrea
+     *  读入缓冲区的总字节数，如果由于已到达文件结尾而没有更多数据，则为-1。
+     *  中文会乱码
+     */
+    @Test
+    public void testFileInputStream() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileReader.txt");
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            byte[] byteBuffer = new byte[1024];
+            int len = 0;
+            while ((len = fileInputStream.read(byteBuffer)) != -1){
+                String s = new String(byteBuffer, 0, len);
+                System.out.print(s);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * 测试FileInputStrea
+     *  读入缓冲区的总字节数，如果由于已到达文件结尾而没有更多数据，则为-1。
+     *  需要转为char类型
+     *  中文会乱码
+     */
+    @Test
+    public void testFileInputStream1() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileReader.txt");
+        FileInputStream fileInputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            int len = 0;
+            StringBuffer sb = new StringBuffer();
+            while ((len = fileInputStream.read()) != -1){
+                sb.append((char) len);
+            }
+            System.out.println(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 测试FileInputStream与FileOutputStream
+     *  复制非文本文件
+     */
+    @Test
+    public void testFileInputStreamAndFileOutputStream() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "a.png");
+        File dstFile = new File(filePath, "b.png");
+        FileInputStream fileInputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            fileOutputStream = new FileOutputStream(dstFile, false);
+            byte[] byteBuffer = new byte[1024];
+            int len = 0;
+            while ((len = fileInputStream.read(byteBuffer)) != -1){
+                fileOutputStream.write(byteBuffer, 0, len);
+            }
+            System.out.println("finished");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void copyFile(String parentDir, String srcFileName, String dstFileName){
+        String filePath = parentDir;
+        File file = new File(filePath, srcFileName);
+        File dstFile = new File(filePath, dstFileName);
+        FileInputStream fileInputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileInputStream = new FileInputStream(file);
+            fileOutputStream = new FileOutputStream(dstFile, false);
+            byte[] byteBuffer = new byte[1024];
+            int len = 0;
+            while ((len = fileInputStream.read(byteBuffer)) != -1){
+                fileOutputStream.write(byteBuffer, 0, len);
+            }
+            System.out.println("finished");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void testCopyFileMethod(){
+        String parentDir = "D:\\test\\io";
+        String srcFileName = "a.png";
+        String dstFileName = "b.png";
+        long start = System.currentTimeMillis();
+        copyFile(parentDir, srcFileName, dstFileName);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start));
     }
 }
