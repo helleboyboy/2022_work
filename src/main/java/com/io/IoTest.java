@@ -519,5 +519,24 @@ public class IoTest {
     }
 
 
+    /**
+     *  将输出到控制台的内容输出到文件！
+     * @throws FileNotFoundException
+     */
+    @Test
+    public void testPrintStream() throws FileNotFoundException {
+        FileOutputStream fileOutputStream = new FileOutputStream(
+                new File("D:\\test\\io", "print.txt"));
+        PrintStream printStream = new PrintStream(fileOutputStream);
+        // 重新分配标准输出流的输出地方,输出到文件
+//        System.setOut(printStream);
+        // 重新分配标准输出流的输出地方,输出到控制台
+        System.setOut(System.out);
+        for (int i = 0; i < 100; i++) {
+            System.out.print((char)i);
+        }
+        printStream.close();
+    }
+
 
 }
