@@ -459,7 +459,8 @@ public class IoTest {
             FileOutputStream fileOutputStream = new FileOutputStream(dstFile);
 //            默认为utf-8bianma
             inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
-            outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+//            修改编码 utf-8 编码转换为 gbk
+            outputStreamWriter = new OutputStreamWriter(fileOutputStream, "GBK");
             char[] charBuffer = new char[1024];
             int len =0;
             while ((len = inputStreamReader.read(charBuffer)) != -1){
@@ -480,6 +481,43 @@ public class IoTest {
             }
         }
     }
+
+
+    /**
+     * idea的测试junit无法输入字符，需要main方法才可以！
+     * @param args
+     */
+    public static void main(String[] args) {
+        BufferedReader bufferedReader = null;
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+            bufferedReader = new BufferedReader(inputStreamReader);
+            boolean flag = true;
+            while (flag){
+                System.out.println("请输入你的字符串:");
+                String s = bufferedReader.readLine();
+                if ("e".equalsIgnoreCase(s) || "exit".equalsIgnoreCase(s)){
+                    System.out.println("程序正常退出 !!! ");
+                    flag = false;
+    //                return;
+                }else {
+                    String res = s.toUpperCase();
+                    System.out.println(res);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
 }
