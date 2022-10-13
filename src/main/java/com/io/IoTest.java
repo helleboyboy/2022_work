@@ -398,4 +398,46 @@ public class IoTest {
         System.out.println((end - start));
     }
 
+
+    @Test
+    public void testWriterNewMethod() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileReader.txt");
+        File dstFile = new File(filePath, "testFileReader3.txt");
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
+        try {
+            FileReader fileReader = new FileReader(file);
+            FileWriter fileWriter = new FileWriter(dstFile);
+            bufferedReader = new BufferedReader(fileReader);
+            bufferedWriter = new BufferedWriter(fileWriter);
+//        String s = bufferedReader.readLine();
+            String res = null;
+            while ((res = bufferedReader.readLine()) != null){
+//                默认没有换行符，\n或者newLine
+                bufferedWriter.write(res);
+//                增加换行符的功能
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
