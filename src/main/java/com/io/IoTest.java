@@ -539,4 +539,35 @@ public class IoTest {
     }
 
 
+    /**
+     * 数据流 处理java的基本数据类型和字符串类型
+     *  notice：
+     *      读取的顺序要一致！
+     * @throws IOException
+     */
+    @Test
+    public void testDataStream() throws IOException {
+        /**
+         * 将内存的数据保存到文件，直接打开会乱码
+         */
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("D:\\test\\io", "dataOut.txt"));
+        DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
+        dataOutputStream.writeUTF("javaAndBigdata");
+        dataOutputStream.flush();
+        dataOutputStream.writeInt(25);
+        dataOutputStream.flush();
+        dataOutputStream.writeBoolean(true);
+        dataOutputStream.flush();
+        dataOutputStream.close();
+
+        File srcFile = new File("D:\\test\\io", "dataOut.txt");
+        FileInputStream fileInputStream = new FileInputStream(srcFile);
+        DataInputStream dataInputStream = new DataInputStream(fileInputStream);
+        System.out.println(dataInputStream.readUTF());
+        System.out.println(dataInputStream.readInt());
+        System.out.println(dataInputStream.readBoolean());
+        dataOutputStream.close();
+    }
+
+
 }
