@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 /**
@@ -439,5 +440,46 @@ public class IoTest {
             }
         }
     }
+
+    /**
+     * 字节流与字符流之间的转换
+     *  字节流 -> 字符流 (输入流 inputStreamReader)
+     *  字符流 -> 字节流 （输出流 outputStreamWriter）
+     *  判断是字符流还是字节流？看后缀即可！！！
+     */
+    @Test
+    public void testTransformStreamAndReader() {
+        String filePath = "D:\\test\\io";
+        File file = new File(filePath, "testFileReader.txt");
+        File dstFile = new File(filePath, "testFileReader_.txt");
+        InputStreamReader inputStreamReader = null;
+        OutputStreamWriter outputStreamWriter = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(dstFile);
+//            默认为utf-8bianma
+            inputStreamReader = new InputStreamReader(fileInputStream, StandardCharsets.UTF_8);
+            outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            char[] charBuffer = new char[1024];
+            int len =0;
+            while ((len = inputStreamReader.read(charBuffer)) != -1){
+                String res = new String(charBuffer);
+                System.out.print(res);
+                outputStreamWriter.write(charBuffer);
+                outputStreamWriter.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStreamReader != null) {
+                    inputStreamReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }
