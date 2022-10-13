@@ -300,4 +300,102 @@ public class IoTest {
         long end = System.currentTimeMillis();
         System.out.println((end - start));
     }
+
+    public void copyFileByBufferedStream(String parentDir, String srcFileName, String dstFileName){
+        File file = new File(parentDir, srcFileName);
+        File dstFile = new File(parentDir, dstFileName);
+        BufferedInputStream bufferedInputStream = null;
+        BufferedOutputStream bufferedOutputStream = null;
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            FileOutputStream fileOutputStream = new FileOutputStream(dstFile);
+            bufferedInputStream = new BufferedInputStream(fileInputStream);
+            bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = bufferedInputStream.read(buffer)) != -1){
+                bufferedOutputStream.write(buffer, 0, len);
+            }
+            bufferedOutputStream.flush();
+            System.out.println("finished");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedOutputStream != null) {
+                    bufferedOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bufferedInputStream != null) {
+                    bufferedInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void testBufferedInputStreamAndBufferedOutputStream() {
+        String parentDir = "D:\\test\\io";
+        String srcFileName = "a.png";
+        String dstFileName = "d.png";
+        long start = System.currentTimeMillis();
+        copyFileByBufferedStream(parentDir, srcFileName, dstFileName);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start));
+    }
+
+
+    public void copyFileByBufferedReaderAndWriter(String parentDir, String srcFileName, String dstFileName){
+        File file = new File(parentDir, srcFileName);
+        File dstFile = new File(parentDir, dstFileName);
+        BufferedReader bufferedReader = null;
+        BufferedWriter bufferedWriter = null;
+        try {
+            FileReader fileReader = new FileReader(file);
+            FileWriter fileWriter = new FileWriter(dstFile);
+            bufferedReader = new BufferedReader(fileReader);
+            bufferedWriter = new BufferedWriter(fileWriter);
+            char[] charBuffer = new char[1024];
+            int len = 0;
+            while ((len = bufferedReader.read(charBuffer)) != -1){
+                bufferedWriter.write(charBuffer, 0, len);
+            }
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (bufferedWriter != null) {
+                    bufferedWriter.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (bufferedReader != null) {
+                    bufferedReader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Test
+    public void testBufferedReaderAndBufferedWriter() {
+        String parentDir = "D:\\test\\io";
+        String srcFileName = "testFileReader.txt";
+        String dstFileName = "testFileReader2.txt";
+        long start = System.currentTimeMillis();
+        copyFileByBufferedReaderAndWriter(parentDir, srcFileName, dstFileName);
+        long end = System.currentTimeMillis();
+        System.out.println((end - start));
+    }
+
 }
