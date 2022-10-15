@@ -669,6 +669,83 @@ public class IoTest {
         }
     }
 
+    /**
+     * RandomAccessFile类既可以作为输入流也可以作为输出流
+     *  两个对象！！！
+     */
+    @Test
+    public void testRandomAccessFile() {
+        RandomAccessFile randomAccessFileIn = null;
+        RandomAccessFile randomAccessFileOut = null;
+        try {
+            randomAccessFileIn = new RandomAccessFile(
+                    new File("D:\\test\\io", "a.png"), "r");
+            randomAccessFileOut = new RandomAccessFile(
+                    new File("D:\\test\\io", "b.png"), "rw");
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = randomAccessFileIn.read(buffer)) != -1){
+                randomAccessFileOut.write(buffer, 0, len);
+            }
+            System.out.println("RandomAccessFile 具有输入输出功能测试完成");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (randomAccessFileOut != null) {
+                    randomAccessFileOut.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (randomAccessFileIn != null) {
+                    randomAccessFileIn.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * RandomAccessFile 类的覆盖是从文件的开头内容开始覆盖的
+     *  如 5b.txt的内容被覆盖后，内容为 aaaab ，原始内容为 bbbbb。 a的内容为 aaaa
+     */
+    @Test
+    public void testOverrideInRandomAccessFile(){
+        RandomAccessFile randomAccessFileIn = null;
+        RandomAccessFile randomAccessFileOut = null;
+        try {
+            randomAccessFileIn = new RandomAccessFile(
+                    new File("D:\\test\\io", "4a.txt"), "r");
+            randomAccessFileOut = new RandomAccessFile(
+                    new File("D:\\test\\io", "5b.txt"), "rw");
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = randomAccessFileIn.read(buffer)) != -1){
+                randomAccessFileOut.write(buffer, 0, len);
+            }
+            System.out.println("RandomAccessFile 具有输入输出功能测试完成");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (randomAccessFileOut != null) {
+                    randomAccessFileOut.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (randomAccessFileIn != null) {
+                    randomAccessFileIn.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }
