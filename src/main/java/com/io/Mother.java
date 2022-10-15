@@ -11,12 +11,13 @@ import java.io.Serializable;
  *      1. 实现Serializable接口
  *      2. 提供一个全局变量serialVersionUID，确保类信息前后一致！
  *      3. 类中的所有属性都需要实现序列化！！
+ *   但是这两个流无法序列化static 和transient 修饰的变量！！！
  */
 public class Mother implements Serializable {
     private static final long serialVersionUID = -1299546909289720531L;
     private String name;
-    private Integer age;
-    private Boolean isTeacher;
+    private static Integer age;
+    private transient Boolean isTeacher;
     private Son son;
 
     @Override
