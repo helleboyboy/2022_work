@@ -577,6 +577,9 @@ public class IoTest {
      */
     @Test
     public void testObjectStream() {
+        /**
+         *  序列化
+         */
         ObjectOutputStream objectOutputStream = null;
         try {
             objectOutputStream = new ObjectOutputStream(
@@ -597,6 +600,9 @@ public class IoTest {
             }
         }
 
+        /**
+         * 反序列化
+         */
         ObjectInputStream objectInputStream = null;
         try {
             objectInputStream = new ObjectInputStream(
@@ -615,7 +621,29 @@ public class IoTest {
                 e.printStackTrace();
             }
         }
+    }
 
+    @Test
+    public void testObjectInputStreamByDiyClass(){
+        ObjectOutputStream objectOutputStream = null;
+        try {
+            objectOutputStream = new ObjectOutputStream(
+                    new FileOutputStream(
+                            new File("D:\\test\\io", "objByDiyOut.dat")));
+            Mother mother = new Mother("ycl", 50);
+            objectOutputStream.writeObject(mother);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (objectOutputStream != null) {
+                    objectOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
