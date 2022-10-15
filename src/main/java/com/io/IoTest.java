@@ -808,4 +808,56 @@ public class IoTest {
         }
     }
 
+
+    /**
+     * 使用 ByteArrayOutputStream 来替代 stringBuffer 或者 StringBuilder
+     */
+    @Test
+    public void testByteArrayStreamToReplaceStringBuilder(){
+        RandomAccessFile randomAccessFileIn = null;
+        RandomAccessFile randomAccessFileOut = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        try {
+            randomAccessFileIn = new RandomAccessFile(
+                    new File("D:\\test\\io", "aaa.txt"), "r");
+            randomAccessFileOut = new RandomAccessFile(
+                    new File("D:\\test\\io", "t1.txt"), "rw");
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = randomAccessFileIn.read(buffer)) != -1){
+                byteArrayOutputStream.write(buffer, 0, len);
+                byteArrayOutputStream.flush();
+            }
+            String res = byteArrayOutputStream.toString("UTF-8");
+            System.out.println(res);
+            byte[] resultInFile = byteArrayOutputStream.toByteArray();
+            randomAccessFileOut.write(resultInFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (randomAccessFileOut != null) {
+                    randomAccessFileOut.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (byteArrayOutputStream != null) {
+                    byteArrayOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (randomAccessFileIn != null) {
+                    randomAccessFileIn.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
