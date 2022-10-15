@@ -1,5 +1,7 @@
 package com.io;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.Serializable;
 
 /**
@@ -12,13 +14,29 @@ import java.io.Serializable;
 public class Mother implements Serializable {
     private String name;
     private Integer age;
+    private Boolean isTeacher;
 
     @Override
     public String toString() {
         return "Mother{" +
                 "name='" + name + '\'' +
                 ", age=" + age +
+                ", isTeacher=" + isTeacher +
                 '}';
+    }
+
+    public Boolean getTeacher() {
+        return isTeacher;
+    }
+
+    public void setTeacher(Boolean teacher) {
+        isTeacher = teacher;
+    }
+
+    public Mother(String name, Integer age, Boolean isTeacher) {
+        this.name = name;
+        this.age = age;
+        this.isTeacher = isTeacher;
     }
 
     public String getName() {
