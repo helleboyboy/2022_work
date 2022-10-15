@@ -748,4 +748,64 @@ public class IoTest {
     }
 
 
+    /**
+     * 实现将文件插入到另一个文件
+     *  RandomAccessFile 只支持覆盖，插入只能自己写！
+     *      1.读取源文件
+     *      2.将RandomAccessFile的指针进行改变，并读取保存指针后面的目标文件内容
+     *      3.再次调整指针
+     *      4.源文件内容覆盖目标文件
+     *      5.再次读入之前保存的目标文件内容
+     */
+    @Test
+    public void testRandomAccessFileByInsert(){
+        RandomAccessFile randomAccessFileIn = null;
+        RandomAccessFile randomAccessFileOut = null;
+        try {
+            randomAccessFileIn = new RandomAccessFile(
+                    new File("D:\\test\\io", "insertRandomAccessFileSource.txt"), "r");
+            randomAccessFileOut = new RandomAccessFile(
+                    new File("D:\\test\\io", "insertRandomAccessFileTarget.txt"), "rw");
+            byte[] buffer = new byte[1024];
+            StringBuffer stringBuffer = new StringBuffer();
+            int len = 0;
+//            randomAccessFileIn.seek(21); // 换行符别忽略！
+            while ((len = randomAccessFileIn.read(buffer)) != -1){
+//                System.out.println(new String(buffer, 0, len));
+                stringBuffer.append(new String(buffer, 0, len));
+            }
+            String sourceStr = stringBuffer.toString();
+//            调整指针
+            randomAccessFileOut.seek(103);
+            byte[] tarBuffer = new byte[1024];
+            len = 0;
+            StringBuffer tarStringBuffer = new StringBuffer();
+            while ((len = randomAccessFileOut.read(tarBuffer)) != -1){
+                tarStringBuffer.append(new String(tarBuffer, 0, len));
+            }
+            String dstStr = tarStringBuffer.toString();
+            randomAccessFileOut.seek(104);
+            randomAccessFileOut.write(sourceStr.getBytes(StandardCharsets.UTF_8));
+            randomAccessFileOut.write(dstStr.getBytes(StandardCharsets.UTF_8));
+            System.out.println("插入成功！");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (randomAccessFileOut != null) {
+                    randomAccessFileOut.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (randomAccessFileIn != null) {
+                    randomAccessFileIn.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
