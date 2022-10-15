@@ -630,7 +630,8 @@ public class IoTest {
             objectOutputStream = new ObjectOutputStream(
                     new FileOutputStream(
                             new File("D:\\test\\io", "objByDiyOut.dat")));
-            Mother mother = new Mother("ycl", 50);
+//            Mother mother = new Mother("ycl", 50);
+            Mother mother = new Mother("ycl", 50, false, new Son());
             objectOutputStream.writeObject(mother);
             objectOutputStream.flush();
         } catch (IOException e) {
