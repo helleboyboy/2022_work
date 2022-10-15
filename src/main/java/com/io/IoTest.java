@@ -570,4 +570,53 @@ public class IoTest {
     }
 
 
+    /**
+     * 利用对象流来说明Java的序列化机制
+     *  序列化： 内存Java对象 保存到磁盘或者通过网络传输出去
+     *  反序列化： 拿到已经序列化的文件，可以读取文件还原 为 内存中的java对象
+     */
+    @Test
+    public void testObjectStream() {
+        ObjectOutputStream objectOutputStream = null;
+        try {
+            objectOutputStream = new ObjectOutputStream(
+                    new FileOutputStream(
+                            new File("D:\\test\\io", "objOut.dat")));
+            String str = new String("你好呀，Java序列化");
+            objectOutputStream.writeObject(str);
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (objectOutputStream != null) {
+                    objectOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(
+                    new FileInputStream(
+                            new File("D:\\test\\io", "objOut.dat")));
+            String res = (String) objectInputStream.readObject();
+            System.out.println(res);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (objectInputStream != null) {
+                    objectInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+
 }
