@@ -624,7 +624,7 @@ public class IoTest {
     }
 
     @Test
-    public void testObjectInputStreamByDiyClass(){
+    public void testObjectOutputStreamByDiyClass(){
         ObjectOutputStream objectOutputStream = null;
         try {
             objectOutputStream = new ObjectOutputStream(
@@ -645,6 +645,29 @@ public class IoTest {
             }
         }
     }
+
+    @Test
+    public void testObjectInputStreamByDiyClass(){
+        ObjectInputStream objectInputStream = null;
+        try {
+            objectInputStream = new ObjectInputStream(
+                    new FileInputStream(
+                            new File("D:\\test\\io", "objByDiyOut.dat")));
+            Mother res = (Mother) objectInputStream.readObject();
+            System.out.println(res.toString());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (objectInputStream != null) {
+                    objectInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 
 }

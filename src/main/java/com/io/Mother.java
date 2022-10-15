@@ -1,11 +1,15 @@
 package com.io;
 
+import java.io.Serializable;
+
 /**
  * @Author: Java页大数据
  * @Date: 2022-10-15:17:06
  * @Describe:
+ *  需要实现Java的序列化条件：
+ *      1. 实现Serializable接口
  */
-public class Mother {
+public class Mother implements Serializable {
     private String name;
     private Integer age;
 
