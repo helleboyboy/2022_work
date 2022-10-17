@@ -3,10 +3,8 @@ package com.inet;
 import org.junit.Test;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
+import java.util.Arrays;
 
 /**
  * @Author: Java页大数据
@@ -173,7 +171,7 @@ public class InetTest {
             while ((len = inputStream.read(buffer)) != -1){
                 byteArrayOutputStream.write(buffer, 0, len);
             }
-            System.out.println("收到服务端的反馈：" + byteArrayOutputStream.toString());
+            System.out.println("客户端已收到服务端的反馈：" + byteArrayOutputStream.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -190,6 +188,60 @@ public class InetTest {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * udp方式的发送端
+     * @throws IOException
+     */
+    @Test
+    public void sender() {
+        DatagramSocket datagramSocket = null;
+        try {
+//        新建套接字实例,不绑定主机或者端口
+            datagramSocket = new DatagramSocket();
+//        将数据装载在数据报实例中
+            String info = "我是大数据页，别名为javaAndBigdata，我现在心情不好，只管发泄，不管别人感受！！！";
+            byte[] buffer = info.getBytes();
+            InetAddress targetAddress = InetAddress.getLocalHost();
+            int port = 9999;
+//        将数据发送到目的地,需要指明!
+            DatagramPacket datagramPacket = new DatagramPacket(buffer, 0, buffer.length, targetAddress, port);
+//        套接字实例发送数据报实例
+            datagramSocket.send(datagramPacket);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+//        关闭资源
+            if (datagramSocket != null) {
+                datagramSocket.close();
+            }
+        }
+    }
+
+    @Test
+    public void receiver() {
+        DatagramSocket datagramSocket = null;
+        try {
+            int port = 9999;
+//        启动端口来接受数据报
+            datagramSocket = new DatagramSocket(port);
+            byte[] buffer = new byte[1024];
+//        使用数组来接收发送端的数据报
+            DatagramPacket datagramPacket = new DatagramPacket(buffer, 0, buffer.length);
+//        套接字实例接收数据报实例
+            datagramSocket.receive(datagramPacket);
+//        获取数据报的数据内容
+            byte[] data = datagramPacket.getData();
+            System.out.println(new String(data, 0, data.length));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+//        关闭资源
+            if (datagramSocket != null) {
+                datagramSocket.close();
             }
         }
     }
