@@ -163,12 +163,14 @@ public class InetTest {
             clientSocket = new Socket(serverInetAddress, serverPort);
             outputStream = clientSocket.getOutputStream();
             outputStream.write("大家好,我叫java页,别名为javaAndBigdata!".getBytes());
+//            在传输玩后立即关闭输出流！！，否则会引起服务器端 的read方法 堵塞 在读输入的环节！！！
+            clientSocket.shutdownOutput();
             System.out.println("客户端已经发送数据!请查看是否收到数据!");
             inputStream = clientSocket.getInputStream();
             byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             int len = 0;
-            while ((len = inputStream.read()) != -1){
+            while ((len = inputStream.read(buffer)) != -1){
                 byteArrayOutputStream.write(buffer, 0, len);
             }
             System.out.println("收到服务端的反馈：" + byteArrayOutputStream.toString());
