@@ -2,10 +2,7 @@ package com.inet;
 
 import org.junit.Test;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -88,6 +85,7 @@ public class InetTest {
         ServerSocket serverSocket = null;
         Socket socket = null;
         InputStream socketInputStream = null;
+        OutputStream outputStream = null;
         ByteArrayOutputStream byteArrayOutputStream = null;
         try {
             serverSocket = new ServerSocket(port);
@@ -103,9 +101,18 @@ public class InetTest {
             String host = socket.getInetAddress().getHostAddress();
             String res = String.format("客户端%s发来的数据为:%s", host, context);
             System.out.println(res);
+            outputStream = socket.getOutputStream();
+            outputStream.write("服务端收到数据了，感谢客户端的馈赠！".getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            try {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             try {
                 if (byteArrayOutputStream != null) {
                     byteArrayOutputStream.close();
@@ -148,6 +155,8 @@ public class InetTest {
         int serverPort = 9898;
         Socket clientSocket = null;
         OutputStream outputStream = null;
+        InputStream inputStream = null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
         InetAddress serverInetAddress = null;
         try {
             serverInetAddress = InetAddress.getLocalHost();
@@ -155,6 +164,14 @@ public class InetTest {
             outputStream = clientSocket.getOutputStream();
             outputStream.write("大家好,我叫java页,别名为javaAndBigdata!".getBytes());
             System.out.println("客户端已经发送数据!请查看是否收到数据!");
+            inputStream = clientSocket.getInputStream();
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read()) != -1){
+                byteArrayOutputStream.write(buffer, 0, len);
+            }
+            System.out.println("收到服务端的反馈：" + byteArrayOutputStream.toString());
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
