@@ -43,6 +43,8 @@ public class UrlTest {
 
     /**
      * 通过url来下载文件
+     * tomcat文件路径:D:\install\tomcat\apache-tomcat-8.5.68-windows-x64\apache-tomcat-8.5.68\webapps\examples
+     *
      */
     @Test
     public void testDownloadFileByUrl() {
