@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Random;
 
 /**
  * @Author: Java页大数据
@@ -120,5 +121,54 @@ public class ReflectionTest {
         System.out.println(person1 == person2);
         System.out.println(person1 == person3);
         System.out.println(person1 == person4);
+    }
+
+
+    /**
+     * 通过运行时类对象调用newInstance方法来构建对应的实例
+     *      1. 对应的类需要有 空参 构造器
+     *      2. 空参构造器权限得够，常设置为 public
+     *    java bean对象常常需要设置 空参构造器，避免出现问题。
+     *      1. 含参数的构造器的参数不定导致无法统一
+     *      2. 避免子类加载时调用加载父类的实例！
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    @Test
+    public void testClazzNewInstance() throws Exception {
+        Class<Person> personClass = Person.class;
+        Person person = personClass.newInstance();
+        System.out.println(person);
+    }
+
+    public Object getInstance(String classPath) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Class<?> aClass = Class.forName(classPath);
+        return aClass.newInstance();
+    }
+
+    /**
+     * 举个例子来认识 反射的动态性！！！
+     * @throws Exception
+     */
+    @Test
+    public void testReflection() throws Exception {
+        String classPath = "";
+        for (int i = 0; i < 100; i++) {
+            int j = new Random().nextInt(3);
+            switch (j) {
+                case 0:
+                    classPath = "java.util.Date";
+                    break;
+                case 1:
+                    classPath = "java.lang.Object";
+                    break;
+                case 2:
+                    classPath = "com.reflection.entity.Person";
+                    break;
+                default:
+            }
+            Object o = getInstance(classPath);
+            System.out.println(o);
+        }
     }
 }
