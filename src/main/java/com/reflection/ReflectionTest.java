@@ -1,11 +1,11 @@
 package com.reflection;
 
+import com.reflection.entity.Dog;
 import com.reflection.entity.Person;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 import java.util.Random;
 
 /**
@@ -171,4 +171,106 @@ public class ReflectionTest {
             System.out.println(o);
         }
     }
+
+
+    /**
+     * 通过反射获取运行时类的更多信息！！！
+     */
+    @Test
+    public void testGetMoreStructureByReflection(){
+        Class<Dog> dogClass = Dog.class;
+        Field[] publicFields = dogClass.getFields();
+        System.out.println("===");
+        // getFields 获取 "当前类及其父类" public权限的属性
+        for (Field publicField : publicFields) {
+            System.out.println(publicField);
+        }
+        System.out.println("===");
+        // 获取 "当前类" 的所有属性,不包含父类;
+        Field[] declaredFields = dogClass.getDeclaredFields();
+        for (Field declaredField : declaredFields) {
+            System.out.print(declaredField + "\t");
+            // 获取属性的访问权限，参数类型，方法名
+//            获取属性的访问权限
+            System.out.print(Modifier.toString(declaredField.getModifiers()) + "\t");
+//            获取属性的形参
+            System.out.print(declaredField.getType() + "\t");
+//            获取属性名
+            System.out.print(declaredField.getName());
+            System.out.println();
+        }
+        System.out.println("===");
+        Method[] methods = dogClass.getMethods();
+        for (Method method : methods) {
+            System.out.print(Modifier.toString(method.getModifiers()) + "\t");
+            System.out.print(method.getReturnType() + "\t");
+            System.out.print(method.getName());
+            System.out.print("(");
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            if (parameterTypes.length > 0){
+                for (int i = 0; i < parameterTypes.length; i++) {
+                    if (i != parameterTypes.length - 1){
+                        System.out.print(parameterTypes[i] + " arg_" + i + ",");
+                    }else {
+                        System.out.print(parameterTypes[i] + " arg_" + i);
+                    }
+                }
+            }
+            System.out.print(")");
+            Class<?>[] exceptionTypes = method.getExceptionTypes();
+            if (exceptionTypes.length > 0){
+                for (int i = 0; i < exceptionTypes.length; i++) {
+                    if (i != exceptionTypes.length - 1){
+                        System.out.print(exceptionTypes[i].getName() + " , ");
+                    }else {
+                        System.out.print(exceptionTypes[i].getName());
+                    }
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("===");
+        Constructor<?>[] constructors = dogClass.getConstructors();
+        for (Constructor<?> constructor : constructors) {
+            System.out.println(constructor.toString());
+        }
+        System.out.println("===");
+        Constructor<?>[] declaredConstructors = dogClass.getDeclaredConstructors();
+        for (Constructor<?> declaredConstructor : declaredConstructors) {
+            System.out.println(declaredConstructor.toString());
+        }
+        System.out.println("===");
+        Class<? super Dog> superclass = dogClass.getSuperclass();
+        System.out.println(superclass);
+        System.out.println("===");
+//        带泛型的父类
+        Type genericSuperclass = dogClass.getGenericSuperclass();
+        System.out.println(genericSuperclass.getTypeName());
+        System.out.println("===");
+//        获取带泛型的父类的泛型,例子获取第一个泛型
+        ParameterizedType genericSuperclass1 = (ParameterizedType) genericSuperclass;
+        Type[] actualTypeArguments = genericSuperclass1.getActualTypeArguments();
+        System.out.println(actualTypeArguments[0].getTypeName());
+        System.out.println("===");
+        Annotation[] annotations = dogClass.getAnnotations();
+        for (Annotation annotation : annotations) {
+            System.out.println(annotation);
+        }
+        System.out.println("===");
+        Class<?>[] interfaces = dogClass.getInterfaces();
+        for (Class<?> inter : interfaces) {
+            System.out.println(inter);
+        }
+        System.out.println("===");
+        Class<?>[] patherInters = superclass.getInterfaces();
+        for (Class<?> patherInter : patherInters) {
+            System.out.println(patherInter);
+        }
+        System.out.println("===");
+        Package pack = dogClass.getPackage();
+        System.out.println(pack.getName());
+        System.out.println("===");
+
+    }
+
 }
