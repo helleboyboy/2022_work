@@ -1,5 +1,6 @@
 package com.reflection.entity;
 
+import java.sql.SQLException;
 import java.util.Comparator;
 
 /**
@@ -11,6 +12,16 @@ import java.util.Comparator;
 public class Dog extends Animal<String> implements Comparator<String> , MyInterface{
     public String address;
     private boolean isBoy;
+
+    @MyAnnotation(value = "java页-play")
+    public void play(String time, boolean isReal) throws NullPointerException, SQLException {
+        System.out.println("dog is playing !!!");
+    }
+
+    @MyAnnotation(value = "java页-go")
+    private void go(){
+        System.out.println("dog is lazy ! it doesn't want to go !!!");
+    }
 
     @Override
     public String toString() {
