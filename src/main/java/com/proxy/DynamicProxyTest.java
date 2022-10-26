@@ -72,6 +72,18 @@ class MyInvocationHandler implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 //        getBeiProxyObject(beiProxyObject);
-        return method.invoke(beiProxyObject, args);
+        ChineseUtils chineseUtils = new ChineseUtils();
+        chineseUtils.getUp();
+        Object returnValue = method.invoke(beiProxyObject, args);
+        chineseUtils.sleep();
+        return returnValue;
+    }
+}
+class ChineseUtils{
+    public void getUp(){
+        System.out.println("起床了");
+    }
+    public void sleep(){
+        System.out.println("睡觉了");
     }
 }
