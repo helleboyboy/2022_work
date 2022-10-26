@@ -1,5 +1,7 @@
 package com.proxy;
 
+import com.reflection.entity.Animal;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -10,7 +12,12 @@ import java.lang.reflect.Proxy;
  * @Describe:
  */
 public class DynamicProxyTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        Class<?> loadClass = StaticProxyTest.class.getClassLoader().loadClass("com.reflection.entity.Animal");
+        Animal animal = (Animal) loadClass.newInstance();
+        System.out.println(animal.toString());
+        System.out.println("上面是测试可以通过加载器来获得对应的运行时类对象");
+
         GuangDong guangDong = new GuangDong();
         Chinese o = (Chinese) ProxyEveryThing.newDiffProxyInstance(guangDong);
         o.province();
